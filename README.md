@@ -6,6 +6,9 @@ Generate Bicep documentation with a single command
 ./Bicep.Docs templates/main.bicep
 ```
 
+## Prerequisites
+You need to have Azure CLI or Bicep CLI installed prior to run Bicep.Docs.
+
 ## Installation
 Bicep.Docs is published as a self-contained package for Windows, Linux and OSX. Check the Releases page for appropriate package. No installation needed.
 
