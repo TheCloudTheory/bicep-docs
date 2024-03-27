@@ -38,3 +38,6 @@ resource sql 'Microsoft.Sql/servers@2021-11-01' = {
     administratorLoginPassword: parSqlAdminLogin
   }
 }
+
+output acrId string = acr.id
+output sqlId string = sql.id

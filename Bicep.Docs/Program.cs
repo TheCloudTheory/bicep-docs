@@ -49,7 +49,19 @@ public class Program
 
                 foreach (var resource in parameters.Resources)
                 {
-                    sb.AppendLine($"| {resource.Type} | {resource.ApiVersion} | {resource.Name} |");
+                    sb.AppendLine($"| {resource.Type} | {resource.ApiVersion} | `{resource.Name}` |");
+                }
+            }
+
+            if (parameters?.Outputs != null)
+            {
+                sb.AppendLine("## Outputs");
+                sb.AppendLine("| Name | Type | Value |");
+                sb.AppendLine("|------|------|-------|");
+
+                foreach (var (name, output) in parameters.Outputs)
+                {
+                    sb.AppendLine($"| {name} | {output.Type} | `{output.Value}` |");
                 }
             }
 
@@ -70,6 +82,9 @@ internal class TemplateSchema
 
     [JsonPropertyName("resources")]
     public Resource[]? Resources { get; set; }
+
+    [JsonPropertyName("outputs")]
+    public IDictionary<string, Output>? Outputs { get; set; }
 }
 
 internal class TemplateParameter
@@ -97,4 +112,13 @@ internal class Resource
 
     [JsonPropertyName("name")]
     public string Name { get; set; } = null!;
+}
+
+internal class Output
+{
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = null!;
+
+    [JsonPropertyName("value")]
+    public string Value { get; set; } = null!;
 }
