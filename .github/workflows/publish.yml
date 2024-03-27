@@ -1,0 +1,48 @@
+name: Publish Bicep.Docs packages
+
+on: 
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+
+defaults:
+ run:
+  working-directory: ./Bicep.Docs
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore --configuration=Release
+    - name: Publish Windows
+      run: dotnet publish -p:PublishProfile=win-x64
+    - name: Publish Linux
+      run: dotnet publish -p:PublishProfile=linux-x64
+    - name: Publish macOS
+      run: dotnet publish -p:PublishProfile=osx-x64
+    - name: Upload Windows artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: win-x64
+        path: ${{ github.workspace }}/Bicep.Docs/bin/Release/net8.0/publish/win-x64
+    - name: Upload Linux artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: linux-x64
+        path: ${{ github.workspace }}/Bicep.Docs/bin/Release/net8.0/publish/linux-x64
+    - name: Upload MacOS artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: osx-x64
+        path: ${{ github.workspace }}/Bicep.Docs/bin/Release/net8.0/publish/osx-x64
