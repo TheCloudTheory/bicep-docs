@@ -7,7 +7,7 @@ Generate Bicep documentation with a single command
 ```
 
 ## Installation
-Bicep.Docs is published as a self-contained package for Windows, Linux and OSX. Check the Releases page for appriopriate package.
+Bicep.Docs is published as a self-contained package for Windows, Linux and OSX. Check the Releases page for appropriate package. No installation needed.
 
 ## Example
 Let's assume your Bicep file (`basic.bicep`) looks like this:
