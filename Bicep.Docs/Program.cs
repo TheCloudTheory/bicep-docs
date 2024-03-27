@@ -10,21 +10,21 @@ public class Program
     {
         var templatePath = args[0];
 
-        if(File.Exists(templatePath))
+        if (File.Exists(templatePath))
         {
             var file = new FileInfo(templatePath);
             var rawTemplate = BicepCompiler.Compile(file, CancellationToken.None);
 
-            #if DEBUG
+#if DEBUG
             Console.WriteLine(rawTemplate);
-            #endif
+#endif
 
             var parameters = JsonSerializer.Deserialize<TemplateSchema>(rawTemplate!);
 
             var sb = new StringBuilder();
             sb.AppendLine($"# {file.Name}");
 
-            if(parameters?.Parameters != null)
+            if (parameters?.Parameters != null)
             {
                 sb.AppendLine("## Parameters");
                 sb.AppendLine("| Name | Description | Type | Default value | Required? | Allowed values |");
@@ -41,8 +41,20 @@ public class Program
                 }
             }
 
+            if (parameters?.Resources != null)
+            {
+                sb.AppendLine("## Resources");
+                sb.AppendLine("| Type | API Version | Name |");
+                sb.AppendLine("|------|-------------|------|");
+
+                foreach (var resource in parameters.Resources)
+                {
+                    sb.AppendLine($"| {resource.Type} | {resource.ApiVersion} | {resource.Name} |");
+                }
+            }
+
             var result = sb.ToString();
-            File.WriteAllText("documentation.md", result); 
+            File.WriteAllText("documentation.md", result);
         }
         else
         {
@@ -55,6 +67,9 @@ internal class TemplateSchema
 {
     [JsonPropertyName("parameters")]
     public IDictionary<string, TemplateParameter>? Parameters { get; set; }
+
+    [JsonPropertyName("resources")]
+    public Resource[]? Resources { get; set; }
 }
 
 internal class TemplateParameter
@@ -70,4 +85,16 @@ internal class TemplateParameter
 
     [JsonPropertyName("metadata")]
     public IDictionary<string, string>? Metadata { get; set; }
+}
+
+internal class Resource
+{
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = null!;
+
+    [JsonPropertyName("apiVersion")]
+    public string ApiVersion { get; set; } = null!;
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = null!;
 }
