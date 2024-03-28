@@ -1,3 +1,7 @@
+metadata BicepDocs = {
+  examplesDirectory: 'templates/examples'
+}
+
 @description('Name of the Azure Container Registry')
 param parAcrName string
 

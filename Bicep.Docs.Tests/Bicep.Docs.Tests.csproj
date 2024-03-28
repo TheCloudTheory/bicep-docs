@@ -22,13 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="templates/" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="templates\**\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content> 
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="templates/examples/example1.bicep" />
   </ItemGroup>
 
 </Project>

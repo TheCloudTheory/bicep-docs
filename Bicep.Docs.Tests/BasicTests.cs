@@ -5,6 +5,6 @@ public class BasicTests
     [Test]
     public void Basic_WhenBicepFileIsProvided_DocumentationShouldBeGenerated()
     {
-        Program.Main(["templates/basic.bicep"]);
+        Program.Main(["--template", "templates/basic.bicep"]);
     }
 }
