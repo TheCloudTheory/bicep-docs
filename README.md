@@ -3,7 +3,7 @@ Generate Bicep documentation with a single command
 
 ## Usage
 ```
-./Bicep.Docs templates/main.bicep
+./Bicep.Docs --template templates/main.bicep
 ```
 
 ## Prerequisites
@@ -86,3 +86,23 @@ The generated documentation file (`documentation.md`) will look like so:
 | sqlId | string | `[resourceId('Microsoft.Sql/servers', parameters('parSqlName'))]` |
 
 ```
+
+## Adding templates
+If you want, you may automatically add templates for your Bicep files, which will be incorporated into the documentation file. All you need is to provide the path to the examples using `metadata` object:
+```
+metadata BicepDocs = {
+  examplesDirectory: 'templates/examples'
+}
+```
+For instance, let's assume the following directory structure:
+```
+templates
+\ -- basic.bicep
+\ -- examples
+     \ -- example1.bicep
+```
+Now, if you run the following command:
+```
+./Bicep.Docs --template templates/basic.bicep
+```
+`Bicep.Docs` will automatically read the content of `example1.bicep` and put it in the generated documentation file.
