@@ -1,5 +1,5 @@
 metadata BicepDocs = {
-  examplesDirectory: 'templates/examples'
+  examplesDirectory: 'templates/basic/examples'
 }
 
 @description('Name of the Azure Container Registry')

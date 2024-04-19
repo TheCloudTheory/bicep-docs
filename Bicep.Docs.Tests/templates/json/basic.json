@@ -1,0 +1,87 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.26.54.24096",
+      "templateHash": "11197120595624797346"
+    },
+    "BicepDocs": {
+      "examplesDirectory": "templates/json/examples"
+    }
+  },
+  "parameters": {
+    "parAcrName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Azure Container Registry"
+      }
+    },
+    "parLocation": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location of the Azure Container Registry"
+      }
+    },
+    "parSku": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "allowedValues": [
+        "Basic",
+        "Standard",
+        "Premium"
+      ],
+      "metadata": {
+        "description": "The SKU of the Azure Container Registry"
+      }
+    },
+    "parSqlName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Azure SQL Server"
+      }
+    },
+    "parSqlAdminLogin": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Azure SQL Server admin user"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2023-07-01",
+      "name": "[parameters('parAcrName')]",
+      "location": "[parameters('parLocation')]",
+      "sku": {
+        "name": "[parameters('parSku')]"
+      },
+      "properties": {
+        "adminUserEnabled": false
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "2021-11-01",
+      "name": "[parameters('parSqlName')]",
+      "location": "[parameters('parLocation')]",
+      "properties": {
+        "administratorLogin": "admin",
+        "administratorLoginPassword": "[parameters('parSqlAdminLogin')]"
+      }
+    }
+  ],
+  "outputs": {
+    "acrId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.ContainerRegistry/registries', parameters('parAcrName'))]"
+    },
+    "sqlId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Sql/servers', parameters('parSqlName'))]"
+    }
+  }
+}

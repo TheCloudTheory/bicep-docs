@@ -15,7 +15,7 @@ public class Program
                 if (File.Exists(o.TemplatePath))
                 {
                     var file = new FileInfo(o.TemplatePath);
-                    var rawTemplate = BicepCompiler.Compile(file, CancellationToken.None);
+                    var rawTemplate = file.Extension == ".json" ? File.ReadAllText(o.TemplatePath) : BicepCompiler.Compile(file, CancellationToken.None);
 
 #if DEBUG
                     Console.WriteLine(rawTemplate);
