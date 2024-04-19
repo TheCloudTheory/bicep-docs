@@ -13,4 +13,10 @@ public class BasicTests
     {
         Program.Main(["--template", "templates/json/basic.json"]);
     }
+
+    [Test]
+    public void Basic_WhenBicepFileIsProvidedWithBooleanValueForParameter_DocumentationShouldBeGenerated()
+    {
+        Program.Main(["--template", "templates/keyvault/main.bicep"]);
+    }
 }

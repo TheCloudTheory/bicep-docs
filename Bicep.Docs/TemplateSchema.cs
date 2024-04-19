@@ -23,7 +23,7 @@ internal class TemplateParameter
     public string Type { get; set; } = null!;
 
     [JsonPropertyName("defaultValue")]
-    public string? DefaultValue { get; set; }
+    public object? DefaultValue { get; set; }
 
     [JsonPropertyName("allowedValues")]
     public string[]? AllowedValues { get; set; }
