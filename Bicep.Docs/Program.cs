@@ -97,7 +97,7 @@ public class Program
                     }
 
                     var result = sb.ToString();
-                    File.WriteAllText("documentation.md", result);
+                    File.WriteAllText(o.OutputPath, result);
                 }
                 else
                 {
