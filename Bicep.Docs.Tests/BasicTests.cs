@@ -19,4 +19,10 @@ public class BasicTests
     {
         Program.Main(["--template", "templates/keyvault/main.bicep"]);
     }
+
+    [Test]
+    public void Basic_WhenTemplateContainParameterTypeNumber_DocumentationShouldBeGenerated()
+    {
+        Program.Main(["--template", "templates/postgresql/main.bicep"]);
+    }
 }

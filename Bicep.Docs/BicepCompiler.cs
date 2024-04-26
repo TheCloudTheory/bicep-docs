@@ -34,8 +34,8 @@ internal class BicepCompiler
                 {
                     // There's also a problem when using Bicep.Docs on Windows if Azure CLI is available via
                     // system PATH, rather than user's PATH. We can try to avoid that by  
-                    Console.WriteLine("Compilation failed, attempting to compile Bicep file using Azure CLI.");
-                    CompileBicepWith("C:\\Program Files\\Microsoft SDKs\\Azure\\CLI2\\wbin\\az", $"bicep build --file {templateFile} --stdout", token, out template);
+                    Console.WriteLine("Compilation failed, attempting to compile Bicep file using Azure CLI (fixed location).");
+                    CompileBicepWith("cmd", $"bicep build --file {templateFile} --stdout", token, out template);
                 }
 
                 throw;               

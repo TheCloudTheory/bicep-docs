@@ -26,7 +26,7 @@ internal class TemplateParameter
     public object? DefaultValue { get; set; }
 
     [JsonPropertyName("allowedValues")]
-    public string[]? AllowedValues { get; set; }
+    public object[]? AllowedValues { get; set; }
 
     [JsonPropertyName("metadata")]
     public IDictionary<string, string>? Metadata { get; set; }
