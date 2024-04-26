@@ -21,10 +21,25 @@ internal class BicepCompiler
         }
         catch (Win32Exception)
         {
-            // First compilation may not work if Bicep CLI is not installed directly,
-            // try to use Azure CLI instead
-            Console.WriteLine("Compilation failed, attempting to compile Bicep file using Azure CLI.");
-            CompileBicepWith("az", $"bicep build --file {templateFile} --stdout", token, out template);
+            try
+            {
+                // First compilation may not work if Bicep CLI is not installed directly,
+                // try to use Azure CLI instead
+                Console.WriteLine("Compilation failed, attempting to compile Bicep file using Azure CLI.");
+                CompileBicepWith("az", $"bicep build --file {templateFile} --stdout", token, out template);
+            }
+            catch (Win32Exception)
+            {
+                if(OperatingSystem.IsWindows())
+                {
+                    // There's also a problem when using Bicep.Docs on Windows if Azure CLI is available via
+                    // system PATH, rather than user's PATH. We can try to avoid that by  
+                    Console.WriteLine("Compilation failed, attempting to compile Bicep file using Azure CLI.");
+                    CompileBicepWith("C:\\Program Files\\Microsoft SDKs\\Azure\\CLI2\\wbin\\az", $"bicep build --file {templateFile} --stdout", token, out template);
+                }
+
+                throw;               
+            }      
         }
 
         return template;
