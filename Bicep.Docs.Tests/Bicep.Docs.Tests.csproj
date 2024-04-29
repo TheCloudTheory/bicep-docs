@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="templates/basic/resourcesAsKeys.bicep" />
     <None Remove="templates/examples/example1.bicep" />
   </ItemGroup>
 

@@ -25,4 +25,11 @@ public class BasicTests
     {
         Program.Main(["--template", "templates/postgresql/main.bicep"]);
     }
+
+    
+    [Test]
+    public void Basic_WhenTemplateResourcesArePresentedAsDictionary_DocumentationShouldBeGenerated()
+    {
+        Program.Main(["--template", "templates/basic/resourcesAsKeys.bicep"]);
+    }
 }

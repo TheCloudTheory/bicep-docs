@@ -2,19 +2,28 @@ using System.Text.Json.Serialization;
 
 namespace Bicep.Docs;
 
-internal class TemplateSchema
+internal abstract class TemplateSchema
 {
     [JsonPropertyName("parameters")]
     public IDictionary<string, TemplateParameter>? Parameters { get; set; }
-
-    [JsonPropertyName("resources")]
-    public Resource[]? Resources { get; set; }
 
     [JsonPropertyName("outputs")]
     public IDictionary<string, Output>? Outputs { get; set; }
 
     [JsonPropertyName("metadata")]
     public IDictionary<string, IDictionary<string, string>>? Metadata { get; set; }
+}
+
+internal class TemplateStandardSchema : TemplateSchema
+{
+    [JsonPropertyName("resources")]
+    public Resource[]? Resources { get; set; }
+}
+
+internal class TemplateKeyedSchema : TemplateSchema
+{
+    [JsonPropertyName("resources")]
+    public IDictionary<string, Resource>? Resources { get; set; }
 }
 
 internal class TemplateParameter

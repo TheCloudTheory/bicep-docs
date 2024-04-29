@@ -21,18 +21,27 @@ public class Program
                     Console.WriteLine(rawTemplate);
 #endif
 
-                    var parameters = JsonSerializer.Deserialize<TemplateSchema>(rawTemplate!);
+                    TemplateSchema? schema;
+
+                    try
+                    {
+                        schema = JsonSerializer.Deserialize<TemplateStandardSchema>(rawTemplate!);
+                    }
+                    catch (JsonException)
+                    {
+                        schema = JsonSerializer.Deserialize<TemplateKeyedSchema>(rawTemplate!);
+                    }          
 
                     var sb = new StringBuilder();
                     sb.AppendLine($"# {file.Name}");
 
-                    if (parameters?.Parameters != null)
+                    if (schema?.Parameters != null)
                     {
                         sb.AppendLine("## Parameters");
                         sb.AppendLine("| Name | Description | Type | Default value | Required? | Allowed values |");
                         sb.AppendLine("|------|-------------|------|---------------|-----------|----------------|");
 
-                        foreach (var (name, parameter) in parameters.Parameters)
+                        foreach (var (name, parameter) in schema.Parameters)
                         {
                             var defaultValue = parameter.DefaultValue != null ? $"`{parameter.DefaultValue}`" : "N/A";
                             var isRequired = defaultValue == "N/A" ? "Yes" : "No";
@@ -43,33 +52,34 @@ public class Program
                         }
                     }
 
-                    if (parameters?.Resources != null)
+                    var resources = TryToGetResources(schema);
+                    if (resources != null)
                     {
                         sb.AppendLine("## Resources");
                         sb.AppendLine("| Type | API Version | Name |");
                         sb.AppendLine("|------|-------------|------|");
 
-                        foreach (var resource in parameters.Resources)
+                        foreach (var resource in resources)
                         {
                             sb.AppendLine($"| {resource.Type} | {resource.ApiVersion} | `{resource.Name}` |");
                         }
                     }
 
-                    if (parameters?.Outputs != null)
+                    if (schema?.Outputs != null)
                     {
                         sb.AppendLine("## Outputs");
                         sb.AppendLine("| Name | Type | Value |");
                         sb.AppendLine("|------|------|-------|");
 
-                        foreach (var (name, output) in parameters.Outputs)
+                        foreach (var (name, output) in schema.Outputs)
                         {
                             sb.AppendLine($"| {name} | {output.Type} | `{output.Value}` |");
                         }
                     }
 
-                    if(parameters?.Metadata != null)
+                    if(schema?.Metadata != null)
                     {
-                        if(parameters.Metadata.TryGetValue("BicepDocs", out IDictionary<string, string>? docsMetadata))
+                        if(schema.Metadata.TryGetValue("BicepDocs", out IDictionary<string, string>? docsMetadata))
                         {
                             if(docsMetadata.TryGetValue("examplesDirectory", out string? examplesDirectory))
                             {
@@ -104,5 +114,20 @@ public class Program
                     throw new FileNotFoundException($"File not found: {o.TemplatePath}");
                 }
             });
+    }
+
+    private static Resource[] TryToGetResources(TemplateSchema? schema)
+    {
+        if (schema is TemplateStandardSchema attempt1 && attempt1.Resources != null)
+        {
+            return attempt1.Resources;
+        }
+
+        if (schema is TemplateKeyedSchema attempt2 && attempt2.Resources != null)
+        {
+            return attempt2.Resources.Select(x => x.Value).ToArray();
+        }
+
+        return Array.Empty<Resource>();
     }
 }
